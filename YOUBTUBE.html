@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube</title>
+    <link rel="icon" href="https://img.icons8.com/color/144/000000/youtube-play.png" type="image/icon type">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        nav {
+            width: 100%;
+            height: 60px;
+            padding: 0 3% 0 2%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            background-color: white;
+        }
+
+        #navLeftPart {
+            display: flex;
+            width: 13%;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        #navMiddlePart {
+            width: 55%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+        }
+
+        #navMiddlePart button {
+            width: 10%;
+        }
+
+        #navRightPart {
+            width: 17%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        #searchedResult {
+            display: none;
+            flex-direction: column;
+            gap: 15px;
+            border: 2px solid rgb(218, 218, 218);
+            overflow: scroll;
+            position: absolute;
+            top: 50px;
+            background-color: white;
+            padding: 12px 15px;
+            /* left: -1000; */
+            height: 500px;
+        }
+
+        .searchedResultP {
+            cursor: pointer;
+        }
+
+        #searchedResult::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* --------------------------------------------------- */
+        /* body container */
+
+        #bodyBox {
+            margin-top: 60px;
+            display: flex;
+        }
+
+        #sideBar {
+            min-width: 75px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            padding: 20px 0;
+            position: fixed;
+            left: 0;
+        }
+
+        #sideBar span {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 60px;
+            cursor: pointer;
+        }
+
+        #sideBar span:hover {
+            background-color: rgb(214, 214, 214);
+        }
+
+        #videosBox {
+            display: flex;
+            flex-direction: column;
+            width: 94%;
+            margin-left: 5%;
+        }
+
+        #sugestions {
+            display: flex;
+            width: 100%;
+            justify-content: space-around;
+            align-items: center;
+            border-bottom: 1px solid rgb(219, 219, 219);
+            border-top: 1px solid rgb(219, 219, 219);
+            height: 60px;
+            position: fixed;
+            top: 60px;
+            background-color: white;
+        }
+
+        .sugBoxes {
+            border: 1px solid rgb(190, 190, 190);
+            padding: 5px 10px;
+            text-align: center;
+            border-radius: 10px;
+            background-color: rgb(243, 243, 243);
+            cursor: pointer;
+        }
+
+        .sugBoxes:hover {
+            background-color: grey;
+        }
+
+        #videos {
+            display: grid;
+            /* display: flex; */
+            width: 100%;
+            grid-template-columns: repeat(4, 23%);
+            justify-content: space-evenly;
+            flex-wrap: wrap;
+            margin-top: 60px;
+            padding: 20px 0;
+            background-color: rgb(241, 241, 241);
+        }
+
+        #videosSecoundry {
+            /* display: grid; */
+            display: flex;
+            width: 100%;
+            /* grid-template-columns: repeat(4, 23%); */
+            /* justify-content: space-evenly; */
+            flex-wrap: wrap;
+            margin-top: 60px;
+            padding: 20px;
+            background-color: rgb(241, 241, 241);
+        }
+
+        #videos p {
+            font-weight: 500;
+            font-size: 15px;
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+        }
+
+        /* ---------------------------------------- */
+
+        .titleWrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* ----------------------------------------- */
+        /* iframe{
+    border: 1px solid red;
+} */
+
+        .videoAPIBox {
+            display: flex;
+            flex-direction: column;
+            /* gap: 5%; */
+            width: 100%;
+            margin-bottom: 20px;
+            cursor: pointer;
+        }
+
+        .videoAPIBoxSecoundry {
+            display: flex;
+            /* flex-direction: column; */
+            gap: 2%;
+            width: 100%;
+            margin-bottom: 20px;
+            cursor: pointer;
+        }
+
+        .video_titleDiv {
+            word-break: break-word;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            line-height: 21px;
+            max-height: 42px;
+            -webkit-line-clamp: 3;
+            /* number of lines to show */
+            -webkit-box-orient: vertical;
+        }
+
+        .channel_titleDiv {
+            display: flex;
+            align-items: center;
+            margin: 8px 0;
+            color: rgb(105, 105, 105);
+            gap: 8px;
+        }
+
+        /* ----------------------------------------------------------- */
+
+        @media (max-width: 540px) {
+            #videos {
+                grid-template-columns: repeat(1, 80%);
+                justify-content: space-evenly;
+            }
+
+            #sugestions {
+                overflow-x: scroll;
+            }
+
+            #sugestions::-webkit-scrollbar {
+                display: none;
+            }
+
+            #videosBox {
+                /* max-width: 70%; */
+                margin-left: 16%;
+            }
+
+            #navMiddlePart input {
+                display: none;
+            }
+
+            #navMiddlePart {
+                width: 18%;
+                align-items: flex-end;
+            }
+
+            #navMiddlePart button {
+                width: 70%;
+            }
+
+            #navLeftPart {
+                width: 30%;
+            }
+
+            #navRightPart {
+                width: 35%;
+            }
+        }
+
+        @media (min-width: 541px) and (max-width: 860px) {
+            #videos {
+                grid-template-columns: repeat(2, 45%);
+                justify-content: space-evenly;
+            }
+
+            #sugestions {
+                overflow-x: scroll;
+            }
+
+            #sugestions::-webkit-scrollbar {
+                display: none;
+            }
+
+            #videosBox {
+                max-width: 90%;
+                margin-left: 12%;
+            }
+
+            #navMiddlePart input {
+                display: none;
+            }
+
+            #navMiddlePart {
+                width: 18%;
+                align-items: flex-end;
+            }
+
+            #navMiddlePart button {
+                width: 70%;
+            }
+
+            #navLeftPart {
+                width: 30%;
+            }
+
+            #navRightPart {
+                width: 35%;
+            }
+        }
+
+        @media (min-width: 861px) and (max-width: 1100px) {
+            #videos {
+                grid-template-columns: repeat(3, 30%);
+                justify-content: space-evenly;
+            }
+
+            #sugestions {
+                overflow-x: scroll;
+            }
+
+            #sugestions::-webkit-scrollbar {
+                display: none;
+            }
+
+            #videosBox {
+                margin-left: 8%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!--Top Navbar -->
+    <nav>
+        <!-- <div id="topLayout"> -->
+        <!-- navbar left part -->
+        <div id="navLeftPart">
+            <img style="cursor: pointer;" src="https://img.icons8.com/material-outlined/24/000000/menu--v3.png" />
+            <span style="display: flex; align-items: center; justify-content: center; gap: 3px; cursor: pointer">
+                <img style="width: 90px;" src="https://logos-world.net/wp-content/uploads/2020/04/YouTube-Logo.png">
+                <p style="margin-bottom: 25px; font-size: small;">IN</p>
+            </span>
+        </div>
+        <!-- navbar middle part -->
+        <div id="navMiddlePart">
+            <div style="display: flex; align-items: center; justify-content: center;">
+                <input
+                    style="width: 85%; height: 38px; padding: 10px; border-radius: 2px 0 0 2px; border: 1px solid rgb(194, 194, 194);"
+                    oninput="debounce(this.value, 1000)" id="query" type="text" placeholder="Search">
+                <button
+                    style="height: 38px; border-radius: 0 2px2px 0px; border: 1px solid rgb(194, 194, 194); cursor: pointer"
+                    onclick="searchVideos()"><img src="https://img.icons8.com/ios/25/000000/search--v1.png" /></button>
+                <span
+                    style="margin-left: 2%; width: 40px; height: 40px; background-color: rgb(247, 247, 247); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer">
+                    <img src="https://img.icons8.com/material-sharp/25/000000/microphone--v1.png" />
+                </span>
+            </div>
+            <div id="searchedResult">
+
+            </div>
+        </div>
+        <!-- navbar right part -->
+        <div id="navRightPart">
+            <span
+                style="border-radius: 50%; background-color: rgb(247, 247, 247); width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; cursor: pointer">
+                <img src="https://img.icons8.com/ios/25/000000/video-call.png" />
+            </span>
+            <img style="cursor: pointer" src="https://img.icons8.com/ios/25/000000/moleskine-icon.png" />
+            <img style="cursor: pointer" src="https://img.icons8.com/ios/25/000000/appointment-reminders--v1.png" />
+            <img style="width: 25px; cursor: pointer;"
+                src="https://scontent.fvns1-2.fna.fbcdn.net/v/t1.6435-9/56410037_2252980961617293_258004578165850112_n.jpg?_nc_cat=110&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=tz16AquMJ5wAX9aQL1U&_nc_ht=scontent.fvns1-2.fna&oh=150418e433fe984913d4665d43fc11c8&oe=618F6E2E"
+                alt="">
+        </div>
+        <!-- </div> -->
+    </nav>
+    <div id="bodyBox">
+        <div id="sideBar">
+            <span>
+                <img style="width: 25px;" src="https://img.icons8.com/material-rounded/24/000000/home.png" />
+                <p style="font-size: 12px;">Home</p>
+            </span>
+            <span>
+                <img style="width: 25px;" src="https://img.icons8.com/ios/50/000000/compass--v1.png" />
+                <p style="font-size: 12px;">Explore</p>
+            </span>
+            <span>
+                <img style="width: 25px;" src="https://img.icons8.com/ios/50/000000/video-playlist.png" />
+                <p style="font-size: 12px;">Subscriptions</p>
+            </span>
+            <span>
+                <img style="width: 25px;" src="https://img.icons8.com/material-outlined/50/000000/video-gallery.png" />
+                <p style="font-size: 12px;">Library</p>
+            </span>
+        </div>
+        <div id="videosBox">
+            <div id="sugestions">
+                <div class="sugBoxes">
+                    <p>All</p>
+                </div>
+                <div class="sugBoxes">
+                    <p>Music</p>
+                </div>
+                <div class="sugBoxes">
+                    <p>Cooking Shows</p>
+                </div>
+                <div class="sugBoxes">
+                    <p>JavaScript</p>
+                </div>
+                <div class="sugBoxes">
+                    <p>Eminem</p>
+                </div>
+                <div class="sugBoxes">
+                    <p>Cold Play</p>
+                </div>
+                <div class="sugBoxes">
+                    <p>Bayern Munich</p>
+                </div>
+                <div class="sugBoxes">
+                    <p>Spongebob Squarepants</p>
+                </div>
+                <img src="https://img.icons8.com/ios-glyphs/15/000000/chevron-right.png" />
+            </div>
+            <div id="videos">
+
+            </div>
+        </div>
+    </div>
+    <!-- <div id="videos"></div> -->
+</body>
+
+</html>
+
+<!-- <body> -->
+
+<!-- <input type="text" id="query" placeholder="Search for a Video" />
+
+    <button onclick="searchVideos()">Search</button> -->
+
+<!-- <div id="videos"></div> -->
+<!-- </body> -->
+
+</html>
+
+<script>
+
+    //AIzaSyASAUetGsH3ZV_l69iRMhGxFM0fO01hJo0
+
+
+    //https://youtube.googleapis.com/youtube/v3/search?q=csk&type=video&key=[YOUR_API_KEY]
+
+    let videos = document.getElementById("videos")
+
+
+    async function searchVideos() {
+        let query = document.getElementById("query").value
+        let res = await fetch(
+            `https://youtube.googleapis.com/youtube/v3/search?q=${query}&type=video&key=AIzaSyASAUetGsH3ZV_l69iRMhGxFM0fO01hJo0&maxResults=20`
+        );
+        let data = await res.json();
+        console.log(data)
+        appendV(data.items)
+    }
+
+    function appendV(video_data) {
+        videos.innerHTML = null;
+        video_data.forEach(({ id: { videoId } }) => {
+            //   console.log(videoId);
+
+
+            let div = document.createElement("div");
+            div.innerHTML = `<iframe width="260" height="215" src="https://www.youtube.com/embed/${videoId}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> `
+            div.style.marginTop = "20px"
+            videos.append(div)
+
+
+        })
+    }
+</script>
